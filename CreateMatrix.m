@@ -24,7 +24,7 @@ f = zeros(numnp,1);
 % Loop on elements
 for ielem = 1:numel
     % Te: global number of the nodes in the current element
-    % Xe: coordinates of the nodes in the current element
+    % Xe: coordenates of the nodes in the current element
     Te = T(ielem,:); 
     % Get local information
     Xe = X(Te,:); 
