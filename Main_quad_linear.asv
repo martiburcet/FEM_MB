@@ -32,14 +32,12 @@ T= load ('elm_2D_quad_linear.dat');
 % NUMERICAL INTEGRATION
 % Number of gauss points
 %ngaus = 4;
-npoints=numberofintegrationpoints(nXy-1,nTy-1);
+ngaus=numberofintegrationpoints(nXy-1,nTy-1);
 
 % Quadrature,Shape Functions
 %[n,wpg,pospg,N,dNdxi] = elements(ncoord,nelnodes);
-pospg=integrationpoints(ncoord,nelnodes,npoints);
-wpg=integrationweights(ncoord,nelnodes,npoints);
-N=shapefunctions(nelnodes,ncoord,xi);
-dNdxi=shapefunctionderivatives(nelnodes,ncoord,xi);
+xi=integrationpoints(ncoord,nelnodes,ngaus);
+int
 % SYSTEM RESULTING OF DISCRETIZING THE WEAK FORM
 [K,f] = CreateMatrix(X(:,2:end),T(:,2:end),pospg,wpg,N,dNdxi);
 
