@@ -128,8 +128,6 @@ function xi = integrationpoints(ncoord,nelnodes,npoints,elident)
 %
    elseif (ncoord == 3) 
 %
-%  3D elements
-%
      if (nelnodes == 4 || nelnodes==10 ) 
        if (npoints == 1) 
          xi(1,1) = 0.25;
@@ -328,6 +326,8 @@ function N = shapefunctions(nelnodes,ncoord,elident,xi)
        N(7) = 0.5*(1.-xi(1)*xi(1))*(1.+xi(2));
        N(8) = 0.5*(1.-xi(1))*(1.-xi(2)*xi(2));
      end
+%
+%   3D elements
 %
    elseif (ncoord==3) 
 
