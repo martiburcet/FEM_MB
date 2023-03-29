@@ -1,9 +1,9 @@
 function [n,w,xi,N,dNdxi]=C3D8
-%====================== No. integration points =============================
+%====================== ELEMENT INFORMATION =================================
 %
-%   Defines the number of integration points:be used for
-%   each element type
-%
+%           n=number of integration points of the element
+%           ncoord= numper of coordinates of the element (2D or 3D)
+%           nodes=number of nodes of the element
 
 n = 8;
 ncoord=3;  
@@ -19,9 +19,9 @@ nodes=8;
            for j = 1:2 
              for i = 1:2
                n = 4*(k-1) + 2*(j-1) + i;
-               xi(1,n) = x1D(i);
-               xi(2,n) = x1D(j);
-               xi(3,n) = x1D(k);
+               xi(n,1) = x1D(i);
+               xi(n,2) = x1D(j);
+               xi(n,3) = x1D(k);
              end
            end
          end
@@ -30,9 +30,8 @@ nodes=8;
 %
 %================= SHAPE FUNCTIONS ==================================
 %
-%        Nij: Shape functions of the Int Point i [4x4] Ni [4x1]
 
-N=zeros(n,n);
+N=zeros(n,nodes);
 for i1=1:n
        N(i1,1) = (1.-xi(i1,1))*(1.-xi(i1,2))*(1.-xi(i1,3))/8.;
        N(i1,2) = (1.+xi(i1,1))*(1.-xi(i1,2))*(1.-xi(i1,3))/8.;
@@ -46,8 +45,7 @@ end
 %
 %================= SHAPE FUNCTION DERIVATIVES ======================
 %
-%        Nij,r: Dev of shape functions of the Int Point i [4x8]
-%        [2*i-1 2*i] => dNi,r [4x2]
+
 dNdxi = zeros(ncoord*n,nodes);
 for i1=1:n
        dNdxi(i1*3-2,1) = -(1.-xi(i1,2))*(1.-xi(i1,3))/8.;

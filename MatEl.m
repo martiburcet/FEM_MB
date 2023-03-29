@@ -16,17 +16,19 @@ nu = diffusion;
 Ke = zeros(nnode,nnode); 
 fe = zeros(nnode,1); 
  
-% Numer of Gauss points
-ngaus = size(pospg,2); 
+% Number of Gauss points
+[ngaus, ncoord]= size(pospg); 
  
 % Loop on Gauss points (computation of integrals on the current element)
-for igaus = 1:ngaus 
+    if ncoord==2
+        for igaus = 1:ngaus 
     N_igaus = N(igaus,:);  
     Nxi_igaus = dNdxi(2*igaus-1,:);   
-    Neta_igaus = dNdxi(2*igaus,:);   
+    Neta_igaus = dNdxi(2*igaus,:);
     Jacob = [Nxi_igaus*(Xe(:,1))	Nxi_igaus*(Xe(:,2))   
-             Neta_igaus*(Xe(:,1))	Neta_igaus*(Xe(:,2))]; 
-    dvolu = wpg(igaus)*det(Jacob); 
+             Neta_igaus*(Xe(:,1))	Neta_igaus*(Xe(:,2))];
+             
+    dvolu = wpg(igaus)*det(Jacob);      
     res = Jacob\[Nxi_igaus;Neta_igaus]; 
     Nx = res(1,:); 
     Ny = res(2,:); 
@@ -35,4 +37,27 @@ for igaus = 1:ngaus
     aux = Isopar(Xe,N_igaus);
     f_igaus = SourceTerm(aux); 
     fe = fe + N_igaus'*(f_igaus*dvolu);
-end 
+        end
+    elseif ncoord==3
+        for igaus = 1:ngaus 
+    N_igaus = N(igaus,:);  
+    Nxi_igaus = dNdxi(3*igaus-2,:);   
+    Neta_igaus = dNdxi(3*igaus-1,:);
+    Nchi_igaus = dNdxi(3*igaus,:);
+    Jacob = [Nxi_igaus*(Xe(:,1))	Nxi_igaus*(Xe(:,2)) Nxi_igaus*(Xe(:,3))  
+             Neta_igaus*(Xe(:,1))	Neta_igaus*(Xe(:,2)) Neta_igaus*(Xe(:,3))
+             Nchi_igaus*(Xe(:,1))	Nchi_igaus*(Xe(:,2)) Nchi_igaus*(Xe(:,3))];
+    
+    dvolu = wpg(igaus)*det(Jacob);     
+    res = Jacob\[Nxi_igaus;Neta_igaus;Nchi_igaus]; 
+    Nx = res(1,:); 
+    Ny = res(2,:); 
+    Nz = res(3,:);
+    
+    Ke = Ke + (nu*(Nx'*Nx+Ny'*Ny+Nz'*Nz))*dvolu; 
+    aux = Isopar(Xe,N_igaus);
+    f_igaus = SourceTerm(aux); 
+    fe = fe + N_igaus'*(f_igaus*dvolu);
+        end
+    end
+end

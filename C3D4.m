@@ -1,9 +1,9 @@
 function [n,w,xi,N,dNdxi]=C3D4
-%====================== No. integration points =============================
+%====================== ELEMENT INFORMATION =================================
 %
-%   Defines the number of integration points:be used for
-%   each element type
-%
+%           n=number of integration points of the element
+%           ncoord= numper of coordinates of the element (2D or 3D)
+%           nodes=number of nodes of the element
 
 n = 1;
 ncoord=3;  
@@ -15,16 +15,15 @@ nodes=4;
 %
 
          xi(1,1) = 0.25;
-         xi(2,1) = 0.25;
-         xi(3,1) = 0.25;
+         xi(1,2) = 0.25;
+         xi(1,3) = 0.25;
          
          w = 1./6.;
 %
 %================= SHAPE FUNCTIONS ==================================
 %
-%        Nij: Shape functions of the Int Point i [4x4] Ni [4x1]
 
-N=zeros(n,n);
+N=zeros(n,nodes);
 for i1=1:n
        N(i1,1) = xi(i1,1);
        N(i1,2) = xi(i1,2);
@@ -34,8 +33,7 @@ end
 %
 %================= SHAPE FUNCTION DERIVATIVES ======================
 %
-%        Nij,r: Dev of shape functions of the Int Point i [4x8]
-%        [2*i-1 2*i] => dNi,r [4x2]
+
 dNdxi = zeros(ncoord*n,nodes);
 for i1=1:n
        dNdxi(i1*3-2,1) = 1.;
